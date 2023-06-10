@@ -4,6 +4,8 @@ random.seed(20)
 prompt = int(input("Enter the number of friends joining (including you):\n"))
 print("")
 
+#Just a test
+
 friend_list = {}
 total = 0
 
