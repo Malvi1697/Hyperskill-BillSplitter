@@ -33,12 +33,13 @@ if prompt > 0:
         print("")
         print(random_person + " is the lucky one!")
         print("")
-        print(friend_list)
     else:
         print("")
         print("No one is going to be lucky")
         print("")
-        print(friend_list)
+
+    for key in friend_list:
+        print(f"{key} will pay {friend_list[key]}")
 
 # Else block if no one is joining the party
 else:
