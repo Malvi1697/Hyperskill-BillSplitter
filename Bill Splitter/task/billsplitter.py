@@ -1,46 +1,50 @@
-# write your code here
 import random
-random.seed(20)
 
-prompt = int(input("Enter the number of friends joining (including you):\n"))
-print("")
+def get_number_of_friends():
+    return int(input("Enter the number of friends joining (including you):\n"))
 
-friend_list = {}
-total = 0
-
-# This prompts for usernames on new lines or print No one is coming if there's 0 people coming.
-if prompt > 0:
-    print("Enter the name of every friend (including you), each on a new line: ")
-    for i in range(prompt):
-        friend_name = input()
-        friend_list[friend_name] = 0
-# This prompts for total bill and splits between users.
-    print("")
-    total_bill = int(input("Enter total bill value:\n"))
-    total = round(int(total_bill) / prompt, 2)
-    for i in friend_list:
-        friend_list[i] = total
-# Prompts for user input to check if user wants to feel lucky or not.
-    print("")
-    prompt = input("Do you want to use the \"Who is lucky?\" feature? Write Yes/No:\n")
-    if prompt == "Yes":
-        friend_list_list = list(friend_list)
-        random_person = random.choice(friend_list_list)
-        total_lucky = round(total_bill / (len(friend_list_list) - 1), 2)
-        for i in friend_list:
-            friend_list[i] = total_lucky
-        friend_list[random_person] = 0
-        print("")
-        print(random_person + " is the lucky one!")
-        print("")
+def get_friend_names(count):
+    if count > 0:
+        print("Enter the name of every friend (including you), each on a new line: ")
+        return {input(): 0 for _ in range(count)}
     else:
-        print("")
+        print("No one is joining for the party")
+        return {}
+
+def get_total_bill():
+    return float(input("Enter total bill value:\n"))
+
+def calculate_split(bill, number_of_friends, friends):
+    split_amount = round(bill / number_of_friends, 2)
+    for name in friends:
+        friends[name] = split_amount
+    return friends
+
+def choose_lucky_friend(friends):
+    if input('Do you want to use the "Who is lucky?" feature? Write Yes/No:\n').lower() == 'yes':
+        lucky_friend = random.choice(list(friends))
+        if len(friends) > 1:
+            bill_without_lucky = round(sum(friends.values()) / (len(friends) - 1), 2)
+            for friend in friends:
+                friends[friend] = bill_without_lucky
+        friends[lucky_friend] = 0
+        print(f"{lucky_friend} is the lucky one!")
+    else:
         print("No one is going to be lucky")
-        print("")
 
-    for key in friend_list:
-        print(f"{key} will pay {friend_list[key]}")
+def display_payments(friends):
+    for name, amount in friends.items():
+        print(f"{name} will pay {amount}")
 
-# Else block if no one is joining the party
-else:
-    print("No one is joining for the party")
+def main():
+    random.seed(20)
+    number_of_friends = get_number_of_friends()
+    if number_of_friends > 0:
+        friends = get_friend_names(number_of_friends)
+        total_bill = get_total_bill()
+        friends = calculate_split(total_bill, number_of_friends, friends)
+        choose_lucky_friend(friends)
+        display_payments(friends)
+
+if __name__ == "__main__":
+    main()
